@@ -1,0 +1,26 @@
+{
+  "name": "club-bot",
+  "version": "1.0.0",
+  "description": "Bot for study group",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LonfLonf/Bot-Club.git"
+  },
+  "keywords": [
+    "Discord",
+    "Bot"
+  ],
+  "author": "LonfLonf",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LonfLonf/Bot-Club/issues"
+  },
+  "homepage": "https://github.com/LonfLonf/Bot-Club#readme",
+  "dependencies": {
+    "discord.js": "^14.19.1"
+  }
+}
