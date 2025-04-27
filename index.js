@@ -1,9 +1,10 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Events, GatewayIntentBits, Collection, MessageFlags } = require('discord.js');
+const { Client, GuildMember, Intents, Events, GatewayIntentBits, Collection, MessageFlags } = require('discord.js');
 const { token } = require('./config.json');
+const stackMusic = [];
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMembers, GatewayIntentBits.MessageContent], });
 
 client.commands = new Collection();
 
