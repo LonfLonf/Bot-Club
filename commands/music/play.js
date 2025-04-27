@@ -1,5 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { joinVoiceChannel, createAudioPlayer, createAudioResource } = require('@discordjs/voice');
+const { joinVoiceChannel } = require('@discordjs/voice');
+const { player } = require('../../index');
+const { createAudioResource } = require('@discordjs/voice');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -25,5 +27,12 @@ module.exports = {
       adapterCreator: voiceChannel.guild.voiceAdapterCreator,
     })
 
+    const path = require('path');
+    const resource = createAudioResource(path.join(__dirname, '../music/a.mp3'));
+    
+    connection.subscribe(player);
+    player.play(resource);
+
+    console.log(resource);
   }
 }
