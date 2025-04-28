@@ -21,7 +21,7 @@ module.exports = {
 
         const query = new URLSearchParams({ qtdWords })
 
-        const url = `https://lonftaka-gbg2g5hca8b2h2b0.brazilsouth-01.azurewebsites.net/api/Words/${qtdWords}`
+        const url = `https://lonftaka-gbg2g5hca8b2h2b0.brazilsouth-01.azurewebsites.net/api/Words/${qtdWords}` 
 
         const result = await request(url, {
             method: 'GET',
