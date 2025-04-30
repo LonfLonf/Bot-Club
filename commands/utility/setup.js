@@ -1,5 +1,6 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } = require('discord.js');
 const { execute } = require('./user');
+const { Component } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -18,11 +19,27 @@ module.exports = {
             )
             .setImage('https://i.pinimg.com/originals/3e/25/3d/3e253df12fb2f893b262702873774fd4.gif')
             .setFooter({ text: 'Feito por LonfTonf', iconURL: 'https://i.imgur.com/AfFp7pu.png' });
-        
+
+        const selectMenuTicket = new StringSelectMenuBuilder()
+            .setCustomId('menu')
+            .setPlaceholder('Escolha uma opção!')
+            .addOptions(
+                new StringSelectMenuOptionBuilder()
+                    .setLabel('Sugestão')
+                    .setDescription('Faça uma sugestão de material, aulas, ou melhorias para os servidor')
+                    .setValue('sugestion'),
+                new StringSelectMenuOptionBuilder()
+                    .setLabel('Report')
+                    .setDescription('Faça uma Denúncia')
+                    .setValue('report'),
+            );
+
+        const row = new ActionRowBuilder()
+            .addComponents(selectMenuTicket);
+
         const channels = await interaction.client.channels.cache.get('1366872751800979548');
 
-        channels.send({ embeds: [embed] });
+        channels.send({ embeds: [embed], components: [row] });
     }
-
 }
 
