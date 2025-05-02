@@ -1,4 +1,4 @@
-const { Events, MessageFlags, EmbedBuilder, ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, time } = require('discord.js');
+const { Events, MessageFlags, EmbedBuilder, ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, time, PermissionOverwrites, PermissionFlagsBits } = require('discord.js');
 const { execute } = require('./ready');
 
 module.exports = {
@@ -60,37 +60,82 @@ module.exports = {
                         .setLabel('Descreva em poucas palavras o ocorrido!')
                         .setStyle(TextInputStyle.Paragraph)
                         .setRequired(true);
-                    
+
                     const actionReport = new ActionRowBuilder()
                         .addComponents(reportinput);
-                    
+
                     modalreport.addComponents(actionReport);
 
                     const user = interaction.user;
 
                     await interaction.showModal(modalreport);
 
-                    const modalfilter = ( interaction ) => interaction.customId === 'modalreport';
+                    const modalfilter = (interaction) => interaction.customId === 'modalreport';
 
                     interaction.awaitModalSubmit({ modalfilter, time: 360_000, })
-                    .then((result) => {
-                        const response = result.fields.getTextInputValue('reportinput');
+                        .then(async (result) => {
+                            const response = result.fields.getTextInputValue('reportinput');
 
-                        const channel = result.client.channels.cache.get('1366983996042510377');
+                            const channel = result.client.channels.cache.get('1366983996042510377');
 
-                        const embed = new EmbedBuilder()
-                            .setColor(0xFF0000)
-                            .setTitle('Report')
-                            .setAuthor({ name: user.username, iconURL: user.avatarURL() })
-                            .setDescription(response)
-                            .setTimestamp();
+                            const embed = new EmbedBuilder()
+                                .setColor(0xFF0000)
+                                .setTitle('Report')
+                                .setAuthor({ name: user.username, iconURL: user.avatarURL() })
+                                .setDescription(response)
+                                .setTimestamp();
 
-                        channel.send({ embeds: [embed] });
+                            channel.send({ embeds: [embed] });
+                            const categoryId = '1367679058627792998'
 
-                        result.reply({ content: "Report enviada com sucesso!", ephemeral: true });
-                    }).catch((err) => {
-                        console.log(err);
-                    });
+                            const newchannel = await result.guild.channels.create({
+                                name: `reportby-${result.user.displayName}`,
+                                type: 0,
+                                parent: categoryId,
+                                PermissionOverwrites: [
+                                    {
+                                        id: result.guild.id,
+                                        deny: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages],
+                                    },
+                                    {
+                                        id: result.user.id,
+                                        allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages],
+                                    },
+                                    {
+                                        id: 1365569549029605426, // Owner
+                                        allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages],
+                                    },
+                                    {
+                                        id: 1365569809533763635, // Moderator
+                                        allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages],
+                                    },
+                                ]
+                            })
+
+                            const embedreport = new EmbedBuilder()
+                                .setColor(0x0099FF)
+                                .setAuthor({ name: 'Central de Atendimento', iconURL: 'https://i.imgur.com/mipSD3G.png' })
+                                .setDescription(
+                                    '**Canal de Denúncia** aberto com sucesso! Aqui você poderá relatar o ocorrido com detalhes:\n\n' +
+                                    '📌 **O que você pode fazer aqui:**\n' +
+                                    '• Envie vídeos, imagens, prints ou escreva o que aconteceu.\n' +
+                                    '• Quanto mais claro for seu relato, mais fácil será resolvermos a situação.\n\n' +
+                                    '⚖️ **E agora?**\n' +
+                                    '• A equipe de moderação vai analisar tudo com cuidado.\n' +
+                                    '• Vamos buscar a melhor solução possível, de forma justa e que resolva o problema da melhor forma pra você.\n\n' +
+                                    '🚨 **Atenção:**\n' +
+                                    '• Denúncias falsas ou sem sentido podem resultar em punições.\n' +
+                                    '• Aqui é um espaço sério, então use com responsabilidade.'
+                                )
+                                .setImage('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExaG1teGtlaHJyMnB3YndvYjQyMTFic3FscTNqM2h6NG41eng2MGg0cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/40F4fLvOkInEk/giphy.gif')
+                                .setFooter({ text: 'Feito por LonfTonf', iconURL: 'https://i.imgur.com/mipSD3G.png' });
+
+                            newchannel.send({ embeds: [embedreport] });
+
+                            result.reply({ content: `Report enviado com sucesso no canal ${newchannel}`, ephemeral: true });
+                        }).catch((err) => {
+                            console.log(err);
+                        });
                 }
             }
         }
